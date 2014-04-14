@@ -95,4 +95,9 @@
     }
 }
 
+- (void)dealloc
+{
+    [self stopAndRemoveAllAnimations];
+}
+
 @end

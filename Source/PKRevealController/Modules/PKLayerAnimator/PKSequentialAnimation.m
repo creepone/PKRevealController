@@ -82,7 +82,6 @@
          animation.duration = duration / [values count];
          animation.timingFunction = [self timingFunctionForAnimationAtIndex:index totalNumberOfAnimations:[values count]];
          animation.identifier = index;
-         animation.delegate = self;
          
          [animations addObject:animation];
      }];
@@ -107,6 +106,7 @@
         self.layer = layer;
         PKAnimation *firstAnimation = self.animations[0];
         firstAnimation.fromValue = [self.layer valueForKeyPath:firstAnimation.keyPath];
+        firstAnimation.delegate = self;
         
         [self.layer setValue:firstAnimation.toValue forKey:firstAnimation.keyPath];
         [self.layer addAnimation:firstAnimation forKey:[self keyForAnimationAtIndex:0]];
@@ -131,6 +131,10 @@
              [self.layer removeAnimationForKey:key];
          }
      }];
+    
+    [self.animations enumerateObjectsUsingBlock:^(PKAnimation *animation, NSUInteger idx, BOOL *stop) {
+        animation.delegate = nil;
+    }];
 }
 
 - (CAMediaTimingFunction *)timingFunctionForAnimationAtIndex:(NSUInteger)index totalNumberOfAnimations:(NSUInteger)total
@@ -211,6 +215,7 @@
         }
         onMainThread:YES];
         
+        nextAnimation.delegate = self;
         [self.layer setValue:nextAnimation.toValue forKeyPath:nextAnimation.keyPath];
         [self.layer addAnimation:nextAnimation forKey:nextAnimationIndexString];
     }

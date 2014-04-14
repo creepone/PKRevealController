@@ -41,14 +41,12 @@
 + (id)animation
 {
     CABasicAnimation *animation = [super animation];
-    animation.delegate = animation;
     return animation;
 }
 
 + (id)animationWithKeyPath:(NSString *)path
 {
     CABasicAnimation *animation = [super animationWithKeyPath:path];
-    animation.delegate = animation;
     return animation;
 }
 
